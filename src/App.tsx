@@ -14,6 +14,10 @@ import TermsPage from "./pages/TermsPage";
 import SecurityPage from "./pages/SecurityPage";
 import ApiDocsPage from "./pages/ApiDocsPage";
 import NotFound from "./pages/NotFound";
+import ApiLayout from "./pages/api/ApiLayout";
+import ConvertApi from "./pages/api/ConvertApi";
+import DownloadApi from "./pages/api/DownloadApi";
+import DocsApi from "./pages/api/DocsApi";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +37,15 @@ const App = () => (
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/security" element={<SecurityPage />} />
           <Route path="/api-docs" element={<ApiDocsPage />} />
+          
+          {/* API Routes */}
+          <Route path="/api" element={<ApiLayout />}>
+            <Route index element={<DocsApi />} />
+            <Route path="convert" element={<ConvertApi />} />
+            <Route path="download/:id" element={<DownloadApi />} />
+            <Route path="docs" element={<DocsApi />} />
+          </Route>
+          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

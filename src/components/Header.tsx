@@ -22,7 +22,7 @@ const Header = () => {
           <Link to="/pricing" className="text-brand-darkGray hover:text-brand-darkBlue transition-colors">
             Pricing
           </Link>
-          <Link to="/api-docs" className="text-brand-darkGray hover:text-brand-darkBlue transition-colors">
+          <Link to="/api/docs" className="text-brand-darkGray hover:text-brand-darkBlue transition-colors">
             API
           </Link>
         </div>
