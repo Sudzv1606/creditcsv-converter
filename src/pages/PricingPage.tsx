@@ -7,14 +7,11 @@ import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const PricingPage = () => {
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
-  
   const plans = [
     {
       name: "Free",
       description: "Basic PDF to CSV conversion for occasional use.",
-      monthlyPrice: 0,
-      yearlyPrice: 0,
+      price: 0,
       features: [
         "5 PDF conversions per month",
         "Standard CSV output",
@@ -33,8 +30,7 @@ const PricingPage = () => {
     {
       name: "Pro",
       description: "Enhanced conversion capabilities for regular users.",
-      monthlyPrice: 9.99,
-      yearlyPrice: 99.99,
+      price: 9.99,
       features: [
         "Unlimited PDF conversions",
         "Advanced CSV customization",
@@ -49,25 +45,6 @@ const PricingPage = () => {
       ],
       buttonText: "Upgrade to Pro",
       highlighted: true
-    },
-    {
-      name: "Business",
-      description: "Complete solution for small businesses and accountants.",
-      monthlyPrice: 19.99,
-      yearlyPrice: 199.99,
-      features: [
-        "Everything in Pro",
-        "Unlimited batch processing",
-        "API access for integrations",
-        "Custom field mapping",
-        "90-day data retention",
-        "Priority phone support",
-        "Custom CSV templates",
-        "Direct import to accounting software"
-      ],
-      limitations: [],
-      buttonText: "Contact Sales",
-      highlighted: false
     }
   ];
   
@@ -82,36 +59,9 @@ const PricingPage = () => {
             <p className="text-xl text-gray-600">
               Choose the plan that best fits your needs. All plans include secure, browser-based conversion.
             </p>
-            
-            <div className="flex justify-center mt-8">
-              <div className="bg-gray-100 p-1 rounded-full inline-flex items-center">
-                <button
-                  className={cn(
-                    "px-4 py-2 rounded-full text-sm font-medium transition-all",
-                    billingCycle === "monthly"
-                      ? "bg-white shadow text-brand-darkBlue"
-                      : "text-gray-500 hover:text-gray-700"
-                  )}
-                  onClick={() => setBillingCycle("monthly")}
-                >
-                  Monthly
-                </button>
-                <button
-                  className={cn(
-                    "px-4 py-2 rounded-full text-sm font-medium transition-all",
-                    billingCycle === "yearly"
-                      ? "bg-white shadow text-brand-darkBlue"
-                      : "text-gray-500 hover:text-gray-700"
-                  )}
-                  onClick={() => setBillingCycle("yearly")}
-                >
-                  Yearly <span className="text-green-600 font-semibold">(Save 15%)</span>
-                </button>
-              </div>
-            </div>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {plans.map((plan) => (
               <div 
                 key={plan.name}
@@ -135,15 +85,15 @@ const PricingPage = () => {
                   <div className="mb-6">
                     <div className="flex items-end">
                       <span className="text-3xl font-bold">
-                        ${billingCycle === "monthly" ? plan.monthlyPrice : plan.yearlyPrice}
+                        ${plan.price}
                       </span>
                       <span className="text-gray-500 ml-1">
-                        /{billingCycle === "monthly" ? "month" : "year"}
+                        /month
                       </span>
                     </div>
-                    {plan.monthlyPrice > 0 && (
+                    {plan.price > 0 && (
                       <p className="text-sm text-gray-500 mt-1">
-                        Billed {billingCycle === "monthly" ? "monthly" : "annually"}
+                        Billed monthly
                       </p>
                     )}
                   </div>
@@ -191,7 +141,7 @@ const PricingPage = () => {
               <div>
                 <h3 className="font-semibold text-lg mb-2">Can I switch plans later?</h3>
                 <p className="text-gray-600">
-                  Yes, you can upgrade or downgrade your plan at any time. If you upgrade, you'll be prorated for the remainder of your billing cycle. If you downgrade, the new plan will take effect at the start of your next billing cycle.
+                  Yes, you can upgrade to Pro at any time. If you upgrade, the new plan will take effect immediately.
                 </p>
               </div>
               
@@ -205,7 +155,7 @@ const PricingPage = () => {
               <div>
                 <h3 className="font-semibold text-lg mb-2">Is there a refund policy?</h3>
                 <p className="text-gray-600">
-                  We offer a 14-day money-back guarantee on all paid plans. If you're not satisfied with our service, contact our support team within 14 days of your purchase for a full refund.
+                  We offer a 14-day money-back guarantee on our Pro plan. If you're not satisfied with our service, contact our support team within 14 days of your purchase for a full refund.
                 </p>
               </div>
               
