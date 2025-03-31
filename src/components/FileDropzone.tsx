@@ -78,6 +78,23 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({ onFileAccepted }) => {
     }
   }, [processFile]);
   
+  const handleButtonClick = useCallback(() => {
+    // Create a hidden file input and trigger it
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.pdf';
+    fileInput.style.display = 'none';
+    fileInput.onchange = (e) => {
+      const target = e.target as HTMLInputElement;
+      if (target.files && target.files[0]) {
+        processFile(target.files[0]);
+      }
+    };
+    document.body.appendChild(fileInput);
+    fileInput.click();
+    document.body.removeChild(fileInput);
+  }, [processFile]);
+  
   const handleReset = useCallback(() => {
     setFileAccepted(false);
     setFileName("");
@@ -107,17 +124,14 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({ onFileAccepted }) => {
               <p className="text-sm text-gray-500">or click to browse files</p>
             </div>
             
-            <div className="relative mt-4">
-              <input
-                type="file"
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                onChange={handleFileChange}
-                accept=".pdf"
-              />
-              <Button type="button" variant="outline" className="relative z-10">
-                Browse Files
-              </Button>
-            </div>
+            <Button 
+              type="button" 
+              variant="outline" 
+              className="relative z-10"
+              onClick={handleButtonClick}
+            >
+              Browse Files
+            </Button>
             
             <p className="text-xs text-gray-500 mt-2">
               Supported format: PDF (Max size: 10MB)

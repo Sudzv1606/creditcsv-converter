@@ -1,11 +1,11 @@
 
 import { useState } from 'react';
-import { FileUploader } from "react-drag-drop-files";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getConversionController, ConversionResult } from "@/api/controllers/ConversionController";
 import { downloadCsv, CsvData } from "@/utils/pdfProcessing";
+import FileDropzone from "@/components/FileDropzone";
 
 // This is a test client for our API - in a real implementation
 // this would be a proper API endpoint handled by a server
@@ -76,15 +76,7 @@ const ConvertApi = () => {
                 <label className="block text-sm font-medium mb-2">
                   Upload PDF Statement
                 </label>
-                <FileUploader
-                  handleChange={handleFileChange}
-                  name="file"
-                  types={["PDF", "pdf"]}
-                  maxSize={10}
-                  minSize={0}
-                  required
-                  label="Upload or drop a PDF statement here"
-                />
+                <FileDropzone onFileAccepted={handleFileChange} />
                 {file && (
                   <p className="mt-2 text-sm text-gray-500">
                     {file.name} ({Math.round(file.size / 1024)} KB)
