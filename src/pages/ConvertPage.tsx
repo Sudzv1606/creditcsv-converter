@@ -1,21 +1,24 @@
 
 import { useState } from "react";
-import { ArrowRight, Download, ShieldCheck, Loader2 } from "lucide-react";
+import { ArrowRight, Download, ShieldCheck, Loader2, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import FileDropzone from "@/components/FileDropzone";
 import { CsvData, CreditCardStatementProcessor, downloadCsv } from "@/utils/pdfProcessing";
 import { toast } from "@/components/ui/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 const ConvertPage = () => {
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [csvData, setCsvData] = useState<CsvData | null>(null);
+  const [documentType, setDocumentType] = useState<string | null>(null);
 
   const handleFileAccepted = (acceptedFile: File) => {
     setFile(acceptedFile);
     // Reset CSV data when a new file is uploaded
     setCsvData(null);
+    setDocumentType(null);
   };
 
   const handleConvert = async () => {
@@ -36,7 +39,20 @@ const ConvertPage = () => {
       
       setCsvData(result);
       
+      // Detect document type based on headers
       if (result) {
+        const headers = result.headers.join(',').toLowerCase();
+        
+        if (headers.includes('amount (in rs.)')) {
+          setDocumentType('Bank Statement');
+        } else if (headers.includes('transaction date') && headers.includes('posting date')) {
+          setDocumentType('Credit Card');
+        } else if (headers.includes('date') && !headers.includes('posting')) {
+          setDocumentType('Bank Statement');
+        } else {
+          setDocumentType('Financial Document');
+        }
+        
         toast({
           title: "Conversion successful",
           description: "Your statement has been converted to CSV format.",
@@ -73,9 +89,9 @@ const ConvertPage = () => {
   return (
     <div className="container py-12">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-2">Credit Card Statement Converter</h1>
+        <h1 className="text-3xl font-bold text-center mb-2">Statement to CSV Converter</h1>
         <p className="text-center text-gray-600 mb-8">
-          Convert your credit card PDF statements to CSV format in seconds
+          Convert your financial statements and bank documents to CSV format in seconds
         </p>
 
         <div className="space-y-8">
@@ -138,8 +154,13 @@ const ConvertPage = () => {
                   {/* Preview of CSV data */}
                   {csvData && (
                     <div className="mt-6 rounded border overflow-hidden">
-                      <div className="bg-gray-50 px-4 py-2 border-b">
+                      <div className="bg-gray-50 px-4 py-2 border-b flex justify-between items-center">
                         <h3 className="font-medium">Preview</h3>
+                        {documentType && (
+                          <Badge variant="outline" className="ml-2">
+                            {documentType}
+                          </Badge>
+                        )}
                       </div>
                       <div className="p-4 overflow-x-auto">
                         <table className="w-full text-sm">
